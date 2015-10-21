@@ -19,7 +19,13 @@ func ** (num: Double, power: Int) -> Double {
 
 class Annuity {
     
-    var schedule = [Payment]()
+    var schedule: [Payment] {
+        var schedule = [Payment]()
+        for period in 0...numberOfPayments {
+            schedule.append(paymentForPeriod(period))
+        }
+        return schedule
+    }
     
     var principal: Double, rate: Double, paymentsPerYear: Int, years: Int
     
@@ -67,11 +73,11 @@ class Annuity {
         self.years = years
     }
     
-    func paymentForPeriod (period: Double) -> Payment {
+    func paymentForPeriod (period: Int) -> Payment {
         
-        let balanceRemaining: Double = principal - period * monthlyPayment
+        let balanceRemaining: Double = principal - Double(period) * monthlyPayment
         
-        let interestPayment: Double = principal - (period - 1) * monthlyPayment
+        let interestPayment: Double = principal - (Double(period) - 1) * monthlyPayment
         
         let principalPayment: Double = monthlyPayment - interestPayment
         
@@ -83,9 +89,9 @@ class Annuity {
 
 class Payment {
 
-    var period: Double, principal: Double, interest: Double, paymentAmount: Double, balance: Double
+    var period: Int, principal: Double, interest: Double, paymentAmount: Double, balance: Double
     
-    init (period: Double, principal: Double, interest: Double, paymentAmount: Double, balance: Double) {
+    init (period: Int, principal: Double, interest: Double, paymentAmount: Double, balance: Double) {
         
         self.period = period
         self.principal = principal
