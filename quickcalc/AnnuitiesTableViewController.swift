@@ -38,34 +38,62 @@ class AnnuitiesTableViewController: UITableViewController, UITextFieldDelegate {
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        switch textField {
-        case self.balance: break
-        case self.rate: break
-        case self.paymentsPerYear: break
-        case self.years: break
-        }
+        print(textField.text)
+        print(range)
+        print(string)
         
-        return true
+        if ((Int(string)) != nil) {
+            
+            switch textField {
+            case self.balance: textField.text = formatCurrency(textField.text!, range: range, replacement: string)
+            case self.rate: break
+            case self.paymentsPerYear: break
+            case self.years: break
+            default: break
+            }
+            
+            return false
+            
+        //} else if (string.rangeOfCharacterFromSet(NSCharacterSet.)) //contains delete char
+        
+        } else {
+            
+            return false
+        }
     }
     
-    func formatCurrency(range: NSRange, replacement: String) -> String {
+    func formatCurrency(string: String, range: NSRange, replacement: String) -> String {
         
-        switch range.length {
-        case 1: return "$0.0\(replacement)"
-        case 2: return "$0.\(replacement)"
-        default:
-            let decimals: String = replacement.substringFromIndex(range.length-2)
-            let dollars: String = replacement.substringToIndex(range.length-2)
-            return "$\(dollars).\(decimals)"
+        if (string.characters.count < 5) {
+            let newString: String = "$0.00"
+            let newRange = Range<String.Index>(start: newString.startIndex.advancedBy(4), end: newString.endIndex)
+            return newString.stringByReplacingCharactersInRange(newRange, withString: replacement)
+        } else {
+            
+            let startIndex = string.startIndex.advancedBy(range.location-1)
+            let newRange = Range<String.Index>(start: startIndex, end: startIndex.advancedBy(range.length))
+            
+            var newString: String = string.stringByReplacingCharactersInRange(newRange, withString: replacement)
+            
+            let correctDecimalIndex = newString.endIndex.advancedBy(-2)
+            let correctDecimalRange = Range<String.Index>(start: correctDecimalIndex, end: correctDecimalIndex.advancedBy(1))
+            
+            let decimalRange: Range = newString.rangeOfString(".")!
+            
+            if (decimalRange != correctDecimalRange) {
+                newString.removeRange(decimalRange)
+                newString.replaceRange(correctDecimalRange, with: ".")
+            }
+            
+            return newString
+            
+            
         }
     }
     
-    func formatRate(range: NSRange, replacement: String) -> String {
-        
-    }
+    
     
 }
-
 
 class AnnuitiesScheduleTableViewController: UITableViewController {
     

@@ -505,9 +505,6 @@
                             <outlet property="delegate" destination="UHN-pI-kIm" id="JoU-l6-UMb"/>
                         </connections>
                     </tableView>
-                    <connections>
-                        <outlet property="stackView" destination="0vi-Lo-rT0" id="l5v-Sl-Ydl"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cNI-tF-iyM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
