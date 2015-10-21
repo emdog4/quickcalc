@@ -11,32 +11,31 @@ import Foundation
 
 infix operator ** { associativity left precedence 170 }
 
-func ** (num: Double, power: Double) -> Double {
+func ** (num: Double, power: Int) -> Double {
     
-    return pow(num, power)
+    return pow(num, Double(power))
 }
 
 
 class Annuity {
     
-    var interestPaid: Double = 0.0
-    var principalPaid : Double = 0.0
+    var schedule = [Payment]()
     
-    var principal: Double, rate: Double, paymentsPerYear: Double, years: Double
+    var principal: Double, rate: Double, paymentsPerYear: Int, years: Int
     
-    var numberOfPayments: Double {
+    var numberOfPayments: Int {
         
         return paymentsPerYear * years
     }
     
     var interest: Double {
 
-        return rate / paymentsPerYear
+        return rate / Double(paymentsPerYear)
     }
     
     var simpleInterest: Double {
         
-        return principal * rate * numberOfPayments
+        return principal * rate * Double(numberOfPayments)
     }
     
     var compoundInterest: Double {
@@ -58,8 +57,9 @@ class Annuity {
         
         return monthlyPayment - interestPayment
     }
+
     
-    init (principal: Double, rate: Double, paymentsPerYear: Double, years: Double) {
+    init (principal: Double, rate: Double, paymentsPerYear: Int, years: Int) {
         
         self.principal = principal
         self.rate = rate
@@ -67,7 +67,30 @@ class Annuity {
         self.years = years
     }
     
+    func paymentForPeriod (period: Double) -> Payment {
+        
+        let balanceRemaining: Double = principal - period * monthlyPayment
+        
+        let interestPayment: Double = principal - (period - 1) * monthlyPayment
+        
+        let principalPayment: Double = monthlyPayment - interestPayment
+        
+        return Payment(period: period, principal: principalPayment, interest: interestPayment, paymentAmount: monthlyPayment, balance: balanceRemaining)
+    }
+    
 }
 
 
+class Payment {
 
+    var period: Double, principal: Double, interest: Double, paymentAmount: Double, balance: Double
+    
+    init (period: Double, principal: Double, interest: Double, paymentAmount: Double, balance: Double) {
+        
+        self.period = period
+        self.principal = principal
+        self.interest = interest
+        self.paymentAmount = paymentAmount
+        self.balance = balance
+    }
+}
