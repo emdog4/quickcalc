@@ -17,31 +17,57 @@ func ** (num: Double, power: Double) -> Double {
 }
 
 
-func simpleInterest (principal: Double, rate: Double, numberOfPayments: Double) -> Double {
+class Annuity {
+    
+    var interestPaid: Double = 0.0
+    var principalPaid : Double = 0.0
+    
+    var principal: Double, rate: Double, paymentsPerYear: Double, years: Double
+    
+    var numberOfPayments: Double {
+        
+        return paymentsPerYear * years
+    }
+    
+    var interest: Double {
 
-    return principal * rate * numberOfPayments
+        return rate / paymentsPerYear
+    }
+    
+    var simpleInterest: Double {
+        
+        return principal * rate * numberOfPayments
+    }
+    
+    var compoundInterest: Double {
+        
+        return principal * (1 + interest) ** numberOfPayments
+    }
+    
+    var monthlyPayment: Double {
+        
+        return principal * (interest * (1 + interest) ** numberOfPayments) / (((1 + interest) ** numberOfPayments) - 1)
+    }
+    
+    var interestPayment: Double {
+        
+        return principal * interest
+    }
+    
+    var principalPayment: Double {
+        
+        return monthlyPayment - interestPayment
+    }
+    
+    init (principal: Double, rate: Double, paymentsPerYear: Double, years: Double) {
+        
+        self.principal = principal
+        self.rate = rate
+        self.paymentsPerYear = paymentsPerYear
+        self.years = years
+    }
+    
 }
 
-func compoundInterest (principal: Double, rate: Double, paymentsPerYear: Double, years: Double) -> Double {
-    
-    return principal * (1 + (rate / paymentsPerYear)) ** (paymentsPerYear * years)
-}
 
-func monthlyPayment (principal: Double, rate: Double, paymentsPerYear: Double, years: Double) -> Double {
-    
-    let interest = rate / paymentsPerYear
-    let totalPayments = paymentsPerYear * years
-    
-    return principal * (interest * (1 + interest) ** totalPayments) / (((1 + interest) ** totalPayments) - 1)
-}
-
-func interestPayment (principal: Double, rate: Double, paymentsPerYear: Double) -> Double {
-    
-    return principal * (rate / paymentsPerYear)
-}
-
-func principalPayment (principal: Double, rate: Double, paymentsPerYear: Double, years: Double) -> Double {
-    
-    return monthlyPayment(principal, rate: rate, paymentsPerYear: paymentsPerYear, years: years) - interestPayment(principal, rate: rate, paymentsPerYear: paymentsPerYear)
-}
 
